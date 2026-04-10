@@ -1,36 +1,44 @@
-# Project Tree Extension
+# TreeScribe - Project Tree Generator
 
-Generate clean project trees with layered ignore rules and export them as
-Markdown, JSON, or HTML.
+## Summary
+
+TreeScribe generates a clean project tree from any folder and exports it as
+Markdown, JSON, or HTML. It is designed for documentation, architecture
+overviews, and repository audits with layered ignore rules, safe traversal,
+optional icon rendering, and rich scan metadata.
+
+## Example Output
+
+### With Icons
+
+![Tree output with icons](tree-with-icons.png)
+
+### Without Icons
+
+![Tree output without icons](tree-without-icons.png)
+
+## Usage
+
+1. Open Command Palette.
+2. Run `Generate Project Tree`.
+3. Choose icon mode for this run.
+4. Choose export format(s) for this run.
+5. Open generated output file(s).
+
+Alternative usage:
+
+1. In Explorer, right-click any folder.
+2. Run `Generate Project Tree From Here`.
 
 ## Features
 
-- Layered ignore system:
-    - Built-in defaults for common noisy folders and files.
-    - `.gitignore` support.
-    - Optional `.projecttreeignore` support.
-    - Additional ignore patterns from settings.
-- Safe traversal:
-    - Directories-first sorting.
-    - Graceful permission-error handling.
-    - Symlink-safe traversal (follow optional, circular links guarded).
-- Per-run interactive flow:
-    - Prompt to choose icons or text-only output.
-    - Prompt to choose export formats for that run.
-- Multi-format export:
-    - Markdown (`project_tree.md` by default).
-    - JSON (`project_tree.json` by default).
-    - HTML (`project_tree.html` by default).
-- Explorer integration:
-    - Right-click any folder and generate from that subfolder.
-- README marker injection:
-    - Inject/update tree between `PROJECT-TREE:START` and `PROJECT-TREE:END`.
-- Rich metadata:
-    - Scan duration.
-    - Ignore and skip counters with reason breakdown.
-    - Total scanned file size.
-    - Top file-type breakdown.
-    - Effective settings snapshot used for the run.
+- Layered ignore support from defaults, `.gitignore`, `.projecttreeignore`, and
+  settings.
+- Safe traversal with directory-first sorting and symlink safeguards.
+- Per-run prompts for icon mode and export formats.
+- Multi-format export: Markdown, JSON, HTML.
+- README marker injection support.
+- Rich metadata for scan diagnostics and project composition.
 
 ## Commands
 
@@ -39,63 +47,61 @@ Markdown, JSON, or HTML.
 
 ## Shortcuts
 
-- `Ctrl+Shift+T` (Windows/Linux)
-- `Cmd+Shift+T` (macOS)
+- Windows/Linux: `Ctrl+Shift+T`
+- macOS: `Cmd+Shift+T`
 
-Note: This shortcut may conflict with existing VS Code keybindings. Rebind in
-Keyboard Shortcuts if needed.
+## Example Use Case
 
-## Settings
+You are opening a pull request for a large repository and need a structure
+snapshot:
 
-| Key                               | Default               | Description                                              |
-| --------------------------------- | --------------------- | -------------------------------------------------------- |
-| `projectTree.additionalIgnore`    | `[]`                  | Extra ignore patterns.                                   |
-| `projectTree.maxDepth`            | `10`                   | Maximum scan depth.                                      |
-| `projectTree.showFileSize`        | `true`                | Show file sizes next to files.                           |
-| `projectTree.followSymlinks`      | `false`               | Follow symlinks during traversal.                        |
-| `projectTree.binaryHandling`      | `mark`                | `off`, `mark`, or `skip` for binary files.               |
-| `projectTree.asciiOnly`           | `false`               | Render text-only tree (no icons).                        |
-| `projectTree.iconSource`          | `bundled`             | `bundled`, `local`, or `remote`.                         |
-| `projectTree.iconAssetsDirectory` | `.project-tree-icons` | Local icon directory (used when icon source is `local`). |
-| `projectTree.outputFileName`      | `project_tree.md`     | Markdown output path.                                    |
-| `projectTree.outputJsonFileName`  | `project_tree.json`   | JSON output path.                                        |
-| `projectTree.outputHtmlFileName`  | `project_tree.html`   | HTML output path.                                        |
-| `projectTree.exportFormats`       | `['markdown']`        | Default export formats.                                  |
-| `projectTree.injectIntoReadme`    | `true`                | Inject tree into README markers if found.                |
+1. Run TreeScribe at repository root.
+2. Select Markdown and JSON export.
+3. Inject the tree into README markers.
+4. Use metadata to explain ignored/skipped counts and scan behavior in the PR
+   description.
+
+## Extension Settings
+
+| Key                               | Default               | Description                                          |
+| --------------------------------- | --------------------- | ---------------------------------------------------- |
+| `projectTree.additionalIgnore`    | `[]`                  | Additional ignore patterns.                          |
+| `projectTree.maxDepth`            | `6`                   | Maximum traversal depth.                             |
+| `projectTree.showFileSize`        | `true`                | Show file sizes in tree output.                      |
+| `projectTree.followSymlinks`      | `false`               | Follow symbolic links during traversal.              |
+| `projectTree.binaryHandling`      | `mark`                | `off`, `mark`, or `skip` for binary files.           |
+| `projectTree.asciiOnly`           | `false`               | Render text-only tree without icons.                 |
+| `projectTree.iconSource`          | `bundled`             | Icon source: `bundled`, `local`, or `remote`.        |
+| `projectTree.iconAssetsDirectory` | `.project-tree-icons` | Local icon directory when using `local` icon source. |
+| `projectTree.outputFileName`      | `project_tree.md`     | Markdown output path (within selected root).         |
+| `projectTree.outputJsonFileName`  | `project_tree.json`   | JSON output path (within selected root).             |
+| `projectTree.outputHtmlFileName`  | `project_tree.html`   | HTML output path (within selected root).             |
+| `projectTree.exportFormats`       | `['markdown']`        | Default export formats.                              |
+| `projectTree.injectIntoReadme`    | `true`                | Inject generated tree into README markers if found.  |
 
 ## Icon Rendering
 
-- `bundled` (recommended): Uses vendored icon assets shipped with the extension.
-- `local`: Downloads missing icons to the configured local icon directory.
-- `remote`: Uses CDN icon URLs.
-- If you choose "Without Icons" in the command prompt, output is text-only for
-  that run regardless of icon source.
+- `bundled` (recommended): uses vendored icon assets shipped with the extension.
+- `local`: downloads missing icons into the configured local icon directory.
+- `remote`: uses CDN icon URLs.
+- Choosing "Without Icons" during prompt forces text-only output for that run.
 
 ## Generated Metadata
 
 Each run includes:
 
-- `Scan Duration` (milliseconds)
-- `Ignored` count
-- `Skipped` count and reason split:
-    - `binary`
-    - `symlink`
-    - `circular`
-    - `permission`
-    - `fs`
-- `Total Size`
-- `Top Types` (extension breakdown)
-- `Effective Settings` snapshot:
-    - max depth
-    - symlink mode
-    - binary mode
-    - icon mode
-    - export formats
+- Scan duration (milliseconds)
+- Ignored count
+- Skipped count with reason breakdown (`binary`, `symlink`, `circular`,
+  `permission`, `fs`)
+- Total scanned file size
+- Top file types by extension
+- Effective settings snapshot for the run
 
 ## README Injection
 
-If `projectTree.injectIntoReadme` is enabled and root `README.md` contains both
-markers below, the tree snippet is replaced between them:
+When `projectTree.injectIntoReadme` is enabled and markers are present in root
+`README.md`, TreeScribe replaces the content between the markers:
 
 ```markdown
 <!-- PROJECT-TREE:START -->
@@ -104,15 +110,15 @@ markers below, the tree snippet is replaced between them:
 
 ## Vendoring Icon Pack
 
-Download and cache the full icon set into `assets/icons/`:
+Download and cache the icon set into `assets/icons`:
 
 ```bash
 npm run icons:vendor
 ```
 
-This is also called by `vscode:prepublish`.
+This is also executed by `vscode:prepublish`.
 
-## Run This Project
+## How To Run This Project
 
 ```bash
 npm install
@@ -120,31 +126,34 @@ npm run icons:vendor
 npm run compile
 ```
 
-Then in VS Code:
+Run in VS Code:
 
-1. Press `F5` to launch the Extension Development Host.
+1. Press `F5` to launch Extension Development Host.
 2. Open Command Palette and run `Generate Project Tree`.
-3. Choose icon mode for this run.
-4. Choose export formats for this run.
 
-Alternative:
-
-1. Right-click any folder in Explorer.
-2. Run `Generate Project Tree From Here`.
-
-## Publish/Package
+Package VSIX:
 
 ```bash
-npm run icons:vendor
-npm run compile
-npx @vscode/vsce package
+vsce package
 ```
-
-Then publish with `vsce publish` after setting your publisher and token.
 
 ## Troubleshooting
 
-- `Generate Project Tree` is a VS Code command, not a shell command. Run it from
-  Command Palette or Explorer context menu.
-- If icons do not appear as expected, check icon source and run choice (with
-  icons vs without icons).
+- If `Generate Project Tree` fails in terminal, remember it is a VS Code command
+  (not a shell command).
+- If icons do not appear, verify icon mode choice and `projectTree.iconSource`.
+- If output files are missing, verify output settings point to paths inside
+  selected root.
+- If README is not updated, ensure both markers exist exactly once in root
+  `README.md`.
+
+## Feedback/Support
+
+We value your feedback! If you encounter any issues or have suggestions for
+improvement, please feel free to raise an issue on GitHub.
+
+- [GitHub Issues](https://github.com/dexxeth/project-tree/issues)
+
+## License
+
+This project is licensed under the MIT License.

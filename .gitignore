@@ -4,3 +4,6 @@ out
 project_tree.md
 project_tree.json
 project_tree.html
+*.vsix
+.vscode
+.vs

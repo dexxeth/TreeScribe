@@ -1,15 +1,37 @@
 {
-	"name": "project-tree",
-	"displayName": "Project Tree",
-	"description": "Generate clean markdown project trees with layered ignore rules.",
+	"name": "treescribe-project-tree",
+	"displayName": "TreeScribe - Project Tree Generator",
+	"description": "Generate clean project trees in Markdown, JSON, and HTML with metadata and README injection support.",
 	"version": "0.0.1",
-	"publisher": "ad89e301-07f4-69b0-a41c-cdc5a8e52db1",
+	"publisher": "dexxeth",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.90.0"
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dexxeth/project-tree.git"
+	},
 	"categories": [
 		"Other"
+	],
+	"icon": "logo.ico",
+	"keywords": [
+		"project tree",
+		"folder tree",
+		"directory tree",
+		"file tree",
+		"repository tree",
+		"repo structure",
+		"project structure",
+		"codebase map",
+		"markdown tree",
+		"json export",
+		"html export",
+		"readme generator",
+		"readme injection",
+		"gitignore",
+		"documentation"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -142,6 +164,7 @@
 		"test": "npm run compile"
 	},
 	"dependencies": {
+		"@vscode/vsce": "^3.7.1",
 		"ignore": "^7.0.5",
 		"vscode-icons-js": "^11.6.1"
 	},
