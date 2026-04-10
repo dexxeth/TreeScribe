@@ -1,0 +1,153 @@
+{
+	"name": "project-tree",
+	"displayName": "Project Tree",
+	"description": "Generate clean markdown project trees with layered ignore rules.",
+	"version": "0.0.1",
+	"publisher": "ad89e301-07f4-69b0-a41c-cdc5a8e52db1",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.90.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "projectTree.generate",
+				"title": "Generate Project Tree"
+			},
+			{
+				"command": "projectTree.generateFromHere",
+				"title": "Generate Project Tree From Here"
+			}
+		],
+		"menus": {
+			"explorer/context": [
+				{
+					"command": "projectTree.generateFromHere",
+					"group": "navigation@99",
+					"when": "explorerResourceIsFolder"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "projectTree.generate",
+				"key": "ctrl+shift+t",
+				"mac": "cmd+shift+t"
+			}
+		],
+		"configuration": {
+			"title": "Project Tree",
+			"properties": {
+				"projectTree.additionalIgnore": {
+					"type": "array",
+					"description": "Additional glob patterns to ignore.",
+					"default": [],
+					"items": {
+						"type": "string"
+					}
+				},
+				"projectTree.maxDepth": {
+					"type": "number",
+					"description": "Maximum traversal depth from the workspace root.",
+					"default": 6,
+					"minimum": 0
+				},
+				"projectTree.showFileSize": {
+					"type": "boolean",
+					"description": "Show file sizes next to file names.",
+					"default": true
+				},
+				"projectTree.followSymlinks": {
+					"type": "boolean",
+					"description": "Follow symbolic links while traversing.",
+					"default": false
+				},
+				"projectTree.binaryHandling": {
+					"type": "string",
+					"description": "How to handle binary files.",
+					"default": "mark",
+					"enum": [
+						"off",
+						"mark",
+						"skip"
+					]
+				},
+				"projectTree.asciiOnly": {
+					"type": "boolean",
+					"description": "Render tree branches using ASCII characters only.",
+					"default": false
+				},
+				"projectTree.iconSource": {
+					"type": "string",
+					"description": "Icon source for markdown output when ASCII mode is off.",
+					"default": "bundled",
+					"enum": [
+						"bundled",
+						"local",
+						"remote"
+					]
+				},
+				"projectTree.iconAssetsDirectory": {
+					"type": "string",
+					"description": "Directory (relative to workspace root) used to store local icon assets.",
+					"default": ".project-tree-icons"
+				},
+				"projectTree.outputFileName": {
+					"type": "string",
+					"description": "Output markdown file path relative to workspace root.",
+					"default": "project_tree.md"
+				},
+				"projectTree.outputJsonFileName": {
+					"type": "string",
+					"description": "Output JSON file path relative to workspace root.",
+					"default": "project_tree.json"
+				},
+				"projectTree.outputHtmlFileName": {
+					"type": "string",
+					"description": "Output HTML file path relative to workspace root.",
+					"default": "project_tree.html"
+				},
+				"projectTree.exportFormats": {
+					"type": "array",
+					"description": "Formats generated when running the project tree command.",
+					"default": [
+						"markdown"
+					],
+					"items": {
+						"type": "string",
+						"enum": [
+							"markdown",
+							"json",
+							"html"
+						]
+					}
+				},
+				"projectTree.injectIntoReadme": {
+					"type": "boolean",
+					"description": "Inject generated tree into README markers if present.",
+					"default": true
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run icons:vendor && npm run compile",
+		"icons:vendor": "node ./scripts/vendor-icons.mjs",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"test": "npm run compile"
+	},
+	"dependencies": {
+		"ignore": "^7.0.5",
+		"vscode-icons-js": "^11.6.1"
+	},
+	"devDependencies": {
+		"@types/node": "^20.17.30",
+		"@types/vscode": "^1.90.0",
+		"typescript": "^5.8.3"
+	}
+}
